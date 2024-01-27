@@ -3,7 +3,11 @@ import Circle from "./Circle";
 
 export default function ProjectCard() {
 	return (
-		<Card className="min-w-48 max-w-80">
+		<Card
+			isPressable
+			isHoverable
+			className="min-w-48 max-w-80 duration-[5ms] hover:-translate-y-2 hover:scale-[1.03]"
+		>
 			<CardHeader>
 				<div>
 					<h1>SolCompute</h1>
