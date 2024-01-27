@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
 	return (
-		<div className="flex h-screen w-fit flex-col justify-between border-r-8 bg-transparent p-4 dark:border-r-black">
+		<div className="flex h-screen w-fit flex-col justify-between border-r-2 bg-transparent p-4 dark:border-r-black">
 			<div className="flex flex-col gap-4">
 				<Link href="#">
 					<Icon active icon={<FolderIcon className="h-10 w-10 " />}></Icon>
