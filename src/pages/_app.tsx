@@ -9,9 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<NextUIProvider className={`${inter.className} flex`}>
+		<NextUIProvider className={`${inter.className} flex flex-row`}>
 			<NextThemesProvider attribute="class" defaultTheme="dark">
-				<Sidebar />
+				<Sidebar></Sidebar>
 				<Component {...pageProps} />
 			</NextThemesProvider>
 		</NextUIProvider>
