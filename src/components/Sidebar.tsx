@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
 	return (
-		<div className="flex w-64 flex-col justify-between bg-transparent p-2">
+		<div className="flex w-64 flex-col justify-between border-r-black bg-transparent bg-fixed p-2">
 			<div className="flex flex-col gap-2">
 				<Link href="#">
 					<Icon active icon={<FolderIcon className="stroke-primary h-5 w-5" />}>
@@ -17,13 +17,13 @@ export default function Sidebar() {
 					</Icon>
 				</Link>
 				<Link href="#">
-					<Icon icon={<SparklesIcon className="stroke-primary h-5 w-5" />}>
-						Generate
+					<Icon icon={<WrenchIcon className="stroke-primary h-5 w-5" />}>
+						Download
 					</Icon>
 				</Link>
 				<Link href="#">
-					<Icon icon={<WrenchIcon className="stroke-primary h-5 w-5" />}>
-						Download
+					<Icon icon={<SparklesIcon className="stroke-primary h-5 w-5" />}>
+						Generate
 					</Icon>
 				</Link>
 			</div>

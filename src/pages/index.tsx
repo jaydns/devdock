@@ -17,7 +17,7 @@ import {
 	Radio,
 	RadioGroup,
 	Spinner,
-	useDisclosure
+	useDisclosure,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -44,7 +44,12 @@ export default function Home() {
 
 	useEffect(() => {
 		async function getData() {
-			const projectPaths = ["/Users/jayden/Developer/solcompute"];
+			const projectPaths = [
+				"/Users/jayden/Developer/solcompute",
+				"safas",
+				"",
+				"",
+			];
 
 			const projects: Project[] = [];
 
@@ -61,9 +66,9 @@ export default function Home() {
 
 	return (
 		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-black">
-			<div className="m-8 flex flex-wrap">
+			<div className="m-4 flex flex-row flex-wrap gap-4">
 				{projects.length === 0 && (
-					<div className="flex justify-center w-full">
+					<div className="flex w-full">
 						<Spinner color="primary" />
 					</div>
 				)}
@@ -80,9 +85,10 @@ export default function Home() {
 			<div className="flex justify-end p-4">
 				<Button
 					radius="full"
+					size="lg"
 					color="primary"
+					variant="flat"
 					isIconOnly
-					className="text-xl"
 					onPress={onOpen}
 				>
 					<PlusIcon className="h-6 w-6" />
@@ -91,7 +97,7 @@ export default function Home() {
 					isDismissable={false}
 					isOpen={isOpen}
 					onOpenChange={onOpenChange}
-					className=""
+					className="pb-4"
 				>
 					<ModalContent>
 						{(onClose) => (
@@ -112,12 +118,7 @@ export default function Home() {
 											case "localFile": {
 												return (
 													<div className="flex flex-col gap-4">
-														<Button
-															variant="faded"
-															radius="sm"
-															size="md"
-															className=""
-														>
+														<Button variant="faded" radius="sm" size="md">
 															Select a directory...
 														</Button>
 														<div className="flex flex-col gap-4">
@@ -219,14 +220,6 @@ export default function Home() {
 											}
 										}
 									})()}
-
-									{/* <Input
-										label="Test"
-										labelPlacement="inside"
-										variant="flat"
-										size="sm"
-										className="h-12 p-0"
-									></Input> */}
 								</ModalBody>
 							</>
 						)}
