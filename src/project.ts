@@ -3,6 +3,17 @@ import { LanguageReport, Project } from './types';
 
 
 async function getProjectDetails(path: string): Promise<Project> {
+    // debug
+    if (!window.__TAURI_IPC__) {
+        return {
+            name: "test",
+            description: "test",
+            path: "test",
+            mainLanguage: "test",
+            id: 1,
+        }
+    }
+
     const stats = await invoke<LanguageReport>("get_lang_stats", { path: path });
 
     console.log(stats)
