@@ -17,6 +17,7 @@ function getRandomInt(max: number) {
 const versions: Record<string, Array<string>> = {
 	python: ["3.12", "3.11", "3.10", "3.9"],
 	node: ["24", "23", "22", "21"],
+	postgresql: ["16", "15", "14"],
 };
 
 export default function DownloadCard(props: { language: string }) {
@@ -37,7 +38,7 @@ export default function DownloadCard(props: { language: string }) {
 	}, []);
 	return (
 		<div>
-			<Card className="min-w-64 max-w-64">
+			<Card className="h-72 min-w-64 max-w-64">
 				<CardHeader className="flex flex-col gap-4">
 					<Image
 						className="mx-auto"
