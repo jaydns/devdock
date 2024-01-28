@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
 	Button,
 	Card,
@@ -7,10 +8,11 @@ import {
 	Dropdown,
 	DropdownItem,
 	DropdownMenu,
-	DropdownTrigger,
+	DropdownTrigger
 } from "@nextui-org/react";
+import { invoke } from "@tauri-apps/api/tauri";
+import { useRouter } from "next/router";
 import Circle from "./Circle";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 const contextMenuItems = [
 	{
@@ -29,12 +31,42 @@ const contextMenuItems = [
 
 export default function ProjectCard(props: {
 	name: string;
+	path: string;
 	description: string;
 	language: string;
 	avatar?: string;
 }) {
+	const router = useRouter()
+
+	async function onPress() {
+		await invoke("open_code_editor", { path: props.path, editor: "code" });
+	}
+
+	async function onDropdownPress(key: string) {
+		switch (key) {
+			case "edit":
+				// route to /edit page
+				router.push("/edit")
+				break;
+			case "stats":
+				router.push("/chart")
+				break;
+			case "delete":
+				console.log("bruh")
+				const projectPathsText = localStorage.getItem("projects");
+				if (!projectPathsText) return;
+				const projectPaths = JSON.parse(projectPathsText);
+				const newProjectPaths = projectPaths.filter(
+					(path: string) => path !== props.path,
+				);
+				localStorage.setItem("projects", JSON.stringify(newProjectPaths));
+				window.location.reload(); // fucking refreshProjectData is in index.tsx god fuck this shit
+				break;
+		}
+	}
+
 	return (
-		<Card isPressable isHoverable className="min-w-48 max-w-80 duration-[5ms]">
+		<Card onPress={onPress} isPressable isHoverable className="min-w-48 max-w-80 duration-[5ms]">
 			<CardHeader>
 				<div>
 					<h1>{props.name}</h1>
@@ -60,6 +92,7 @@ export default function ProjectCard(props: {
 						<DropdownMenu items={contextMenuItems}>
 							{contextMenuItems.map((menuItem) => (
 								<DropdownItem
+									onPress={() => onDropdownPress(menuItem.key)}
 									key={menuItem.key}
 									color={menuItem.key === "delete" ? "danger" : "default"}
 									className={

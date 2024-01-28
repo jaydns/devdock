@@ -13,10 +13,12 @@
     "@heroicons/react": "^2.1.1",
     "@nextui-org/react": "^2.2.9",
     "@tauri-apps/api": "^1.5.3",
+    "chart.js": "^4.4.1",
     "framer-motion": "^11.0.3",
     "next": "14.1.0",
     "next-themes": "^0.2.1",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18"
   },
   "devDependencies": {

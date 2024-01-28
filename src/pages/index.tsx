@@ -34,6 +34,7 @@ export default function Home() {
 
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 	const [selected, setSelected] = useState("");
+	const [isLoadingProjects, setIsLoadingProjects] = useState(false);
 
 	const [selectedKeys, setSelectedKeys] = useState<
 		"all" | Set<string | number>
@@ -85,10 +86,12 @@ export default function Home() {
 	}
 
 	async function refreshProjectData() {
+		setIsLoadingProjects(true);
 		const localStorageProjectPaths = localStorage.getItem("projects");
 		let projectPaths;
 
 		if (!localStorageProjectPaths) {
+			setIsLoadingProjects(false);
 			return;
 		}
 
@@ -101,6 +104,7 @@ export default function Home() {
 			projects.push(project);
 		}
 
+		setIsLoadingProjects(false);
 		setProjects(projects);
 	}
 
@@ -108,10 +112,21 @@ export default function Home() {
 
 	return (
 		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-black">
-			<div className="m-4 flex flex-row flex-wrap gap-4">
-				{projects.length === 0 && (
+			<div className="absolute">
+				<h1 className="text-4xl font-bold p-4">Welcome to <span className="bg-gradient-to-r from-blue-600 to-indigo-500 text-transparent bg-clip-text">DevDock!</span></h1>
+			</div>
+			<div className="m-4 flex flex-row flex-wrap gap-4 pt-14">
+				{isLoadingProjects && (
 					<div className="flex w-full">
 						<Spinner color="primary" />
+					</div>
+				)}
+
+				{(!isLoadingProjects && projects.length === 0) && (
+					<div className="flex w-full pt-4">
+						<p className="text-gray-500 dark:text-gray-400">
+							No projects found. Add a project to get started!
+						</p>
 					</div>
 				)}
 				{projects.map((project) => (
@@ -120,6 +135,7 @@ export default function Home() {
 						description={project.description}
 						language={project.mainLanguage}
 						key={project.id}
+						path={project.path}
 						avatar={project.avatar}
 					/>
 				))}
@@ -138,7 +154,7 @@ export default function Home() {
 				<Modal
 					isDismissable={false}
 					isOpen={isOpen}
-					onOpenChange={onOpenChange}
+					onOpenChange={handleModalClose}
 					className="pb-4"
 				>
 					<ModalContent>
@@ -188,9 +204,6 @@ export default function Home() {
 																>
 																	<DropdownItem key="Visual Studio Code">
 																		Visual Studio Code
-																	</DropdownItem>
-																	<DropdownItem key="Visual Studio">
-																		Visual Studio
 																	</DropdownItem>
 																	<DropdownItem key="Xcode">Xcode</DropdownItem>
 																	<DropdownItem key="RustRover">
