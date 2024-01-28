@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "if [ \"$SKIP_BUILD\" = \"true\" ]; then echo \"Skipping build\"; else npm run build; fi",
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "if [ \"$SKIP_BUILD\" = \"true\" ]; then echo \"Skipping build\"; else npm run dev; fi",
     "devPath": "http://localhost:3000",
     "distDir": "../out"
   },
@@ -53,13 +53,15 @@
     "updater": {
       "active": false
     },
+    "macOSPrivateApi": true,
     "windows": [
       {
         "fullscreen": false,
         "height": 600,
         "resizable": true,
         "title": "DevDock",
-        "width": 800
+        "width": 800,
+        "transparent": true
       }
     ]
   }

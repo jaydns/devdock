@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import Circle from "./Circle";
 
-export default function ProjectCard() {
+export default function ProjectCard(props: { name: string; description: string; language: string, avatar?: string }) {
 	return (
 		<Card
 			isPressable
@@ -10,18 +10,18 @@ export default function ProjectCard() {
 		>
 			<CardHeader>
 				<div>
-					<h1>SolCompute</h1>
+					<h1>{props.name}</h1>
 				</div>
 			</CardHeader>
 			<CardBody>
 				<div>
-					<h1>SolCompute - our winning submission to ChargerHacks 2023</h1>
+					<h1>{props.description}</h1>
 				</div>
 			</CardBody>
 			<CardFooter>
 				<div className="flex flex-row items-center gap-1">
-					<Circle language="JavaScript" />
-					<h1>JavaScript</h1>
+					<Circle language={props.language} />
+					<h1>{props.language}</h1>
 				</div>
 			</CardFooter>
 		</Card>

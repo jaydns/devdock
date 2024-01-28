@@ -4,14 +4,14 @@ export default function Circle(props: {
 }) {
 	const languageColorVariants: Record<string, string> = {
 		Python: "bg-[#3572a5]",
-		JavaScript: "bg-[#3078c6]",
+		JavaScript: "bg-[#f1e05a]",
 		TypeScript: "bg-[#3178c6]",
+		Rust: "bg-[#dea584]"
 	};
 	return (
 		<div
-			className={`h-3 w-3 rounded-full ${
-				languageColorVariants[props.language]
-			} ${props.className}`}
+			className={`h-3 w-3 rounded-full ${languageColorVariants[props.language]
+				} ${props.className}`}
 		></div>
 	);
 }

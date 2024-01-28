@@ -1,24 +1,26 @@
 import ProjectCard from "@/components/ProjectCard";
-import { CogIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { getProjectDetails } from "@/project";
+import { Project } from "@/types";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import {
+	Autocomplete,
+	AutocompleteItem,
 	Button,
-	Input,
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalHeader,
-	RadioGroup,
 	Radio,
-	useDisclosure,
-	Autocomplete,
-	AutocompleteItem,
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownItem,
+	RadioGroup,
+	Spinner,
+	useDisclosure
 } from "@nextui-org/react";
 import Image from "next/image";
-import { useState, useMemo, Key } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const gitRepos = [
 	{ label: "jaydns/solcompute", value: "jaydnsSolcompute" },
@@ -27,6 +29,8 @@ const gitRepos = [
 ];
 
 export default function Home() {
+	const [projects, setProjects] = useState<Project[]>([]);
+
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selected, setSelected] = useState("");
 
@@ -38,10 +42,40 @@ export default function Home() {
 		[selectedKeys],
 	);
 
+	useEffect(() => {
+		async function getData() {
+			const projectPaths = ["/Users/jayden/Developer/solcompute"];
+
+			const projects: Project[] = [];
+
+			for (const path of projectPaths) {
+				const project: Project = await getProjectDetails(path);
+				projects.push(project);
+			}
+
+			setProjects(projects);
+		}
+
+		getData();
+	}, []);
+
 	return (
-		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-[rgba(39,39,39,255)]">
+		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-black">
 			<div className="m-8 flex flex-wrap">
-				<ProjectCard></ProjectCard>
+				{projects.length === 0 && (
+					<div className="flex justify-center w-full">
+						<Spinner color="primary" />
+					</div>
+				)}
+				{projects.map((project) => (
+					<ProjectCard
+						name={project.name}
+						description={project.description}
+						language={project.mainLanguage}
+						key={project.id}
+						avatar={project.avatar}
+					/>
+				))}
 			</div>
 			<div className="flex justify-end p-4">
 				<Button
