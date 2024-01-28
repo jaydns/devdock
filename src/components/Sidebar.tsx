@@ -1,12 +1,12 @@
 import {
-	FolderIcon,
-	WrenchIcon,
-	SparklesIcon,
 	Cog6ToothIcon,
+	FolderIcon,
+	SparklesIcon,
+	WrenchIcon,
 } from "@heroicons/react/24/outline";
-import Icon from "./Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Icon from "./Icon";
 
 export default function Sidebar() {
 	const router = useRouter();
@@ -26,7 +26,7 @@ export default function Sidebar() {
 						active={router.pathname == "/download"}
 						icon={<WrenchIcon className="h-5 w-5 stroke-primary" />}
 					>
-						Download
+						Tools
 					</Icon>
 				</Link>
 				<Link href="/generate">

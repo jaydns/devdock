@@ -9,11 +9,11 @@ import {
 	DropdownItem,
 	DropdownMenu,
 	DropdownTrigger,
-	Progress,
-	Spinner,
+	Spinner
 } from "@nextui-org/react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function getRandomInt(max: number) {
 	return Math.floor(Math.random() * max);
@@ -25,12 +25,27 @@ const versions: Record<string, Array<string>> = {
 	postgresql: ["16", "15", "14"],
 };
 
+
+
 export default function DownloadCard(props: { language: string }) {
 	const [disabled, setDisabled] = useState(true);
 	const [progressValue, setProgressValue] = useState(0);
 	const [showProgress, setShowProgress] = useState(false);
 	const [showManaged, setShowManaged] = useState(false);
 	const [isFinished, setIsFinished] = useState(false);
+
+	const router = useRouter();
+
+	function onEditPress() {
+		router.push("/dbedit");
+	}
+
+	useEffect(() => {
+		if (props.language == "PostgreSQL") {
+			setShowManaged(true);
+			setShowProgress(false);
+		}
+	}, [props.language])
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -88,7 +103,7 @@ export default function DownloadCard(props: { language: string }) {
 								<Button>Manage</Button>
 							</DropdownTrigger>
 							<DropdownMenu>
-								<DropdownItem key="edit">Edit</DropdownItem>
+								<DropdownItem onPress={onEditPress} key="edit">Edit</DropdownItem>
 								<DropdownItem
 									key="delete"
 									className="text-danger"

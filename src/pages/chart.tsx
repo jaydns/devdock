@@ -52,7 +52,7 @@ export default function Chart() {
                         labels: ["JavaScript", "Rust", "Dockerfile", "CSS"],
                         datasets: [
                             {
-                                label: "# of Votes",
+                                label: "%",
                                 data: [94.4, 3.5, 1.4, 0.7],
                                 backgroundColor: ["#f1e05a", "#dea584", "#384d54", "#563d7c"],
                                 borderColor: ["#f1e05a", "#dea584", "#384d54", "#563d7c"],
