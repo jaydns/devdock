@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import ActiveLine from "./ActiveLine";
 
 export default function Icon(props: {
 	icon: ReactNode;
