@@ -10,6 +10,9 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			colors: {
+				"active-rgba": "rgba(184, 184, 184, 10)",
+			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
 				"gradient-conic":
