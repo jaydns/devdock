@@ -3,8 +3,9 @@ all(not(debug_assertions), target_os = "windows"),
 windows_subsystem = "windows"
 )]
 
+use std::process::Command;
 use tauri::Manager;
-use window_vibrancy::{apply_acrylic, apply_vibrancy, NSVisualEffectMaterial, };
+use window_vibrancy::{apply_acrylic, apply_vibrancy, NSVisualEffectMaterial};
 use tokei::{Config, Languages};
 use configparser::ini::Ini;
 
@@ -28,6 +29,16 @@ fn get_remote_repo_url(path: &str) -> String {
     return remote.to_string();
 }
 
+#[tauri::command]
+fn open_code_editor(path: &str, editor: &str) {
+    let mut child = Command::new(editor)
+        .arg(path)
+        .spawn()
+        .expect("failed to execute process");
+
+    child.wait().expect("failed to wait for child to finish");
+}
+
 fn main() {
   tauri::Builder::default()
       .setup(|app| {
@@ -43,7 +54,7 @@ fn main() {
 
         Ok(())
       })
-      .invoke_handler(tauri::generate_handler![get_lang_stats, get_remote_repo_url])
+      .invoke_handler(tauri::generate_handler![get_lang_stats, get_remote_repo_url, open_code_editor])
       .run(tauri::generate_context!())
       .expect("error while running tauri application");
 }
