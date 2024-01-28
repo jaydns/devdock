@@ -5,7 +5,7 @@ windows_subsystem = "windows"
 
 use tauri::Manager;
 use window_vibrancy::{apply_acrylic, apply_vibrancy, NSVisualEffectMaterial, };
-use tokei::{Config, Languages, LanguageType};
+use tokei::{Config, Languages};
 use configparser::ini::Ini;
 
 #[tauri::command]

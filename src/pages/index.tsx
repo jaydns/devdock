@@ -19,6 +19,7 @@ import {
 	Spinner,
 	useDisclosure,
 } from "@nextui-org/react";
+import { open } from '@tauri-apps/api/dialog';
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
@@ -31,7 +32,7 @@ const gitRepos = [
 export default function Home() {
 	const [projects, setProjects] = useState<Project[]>([]);
 
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 	const [selected, setSelected] = useState("");
 
 	const [selectedKeys, setSelectedKeys] = useState<
@@ -42,27 +43,68 @@ export default function Home() {
 		[selectedKeys],
 	);
 
-	useEffect(() => {
-		async function getData() {
-			const projectPaths = [
-				"/Users/jayden/Developer/solcompute",
-				"safas",
-				"",
-				"",
-			];
+	const [selectedFolder, setSelectedFolder] = useState("Select a folder...");
 
-			const projects: Project[] = [];
+	const handleModalClose = () => {
+		onClose();
+		resetModalState();
+	};
 
-			for (const path of projectPaths) {
-				const project: Project = await getProjectDetails(path);
-				projects.push(project);
+	const resetModalState = () => {
+		setSelected("");
+		setSelectedFolder("Select a folder...")
+	};
+
+	function directorySelectOnClick() {
+		open({
+			directory: true,
+			multiple: false,
+		}).then((res) => {
+			if (res !== null) {
+				setSelectedFolder(res as string);
 			}
+		});
+	}
 
-			setProjects(projects);
+	function localDirectoryProjectCreateOnClick(closeModal: () => void) {
+		const localStorageProjectPaths = localStorage.getItem("projects");
+		let projectPaths;
+
+		if (!localStorageProjectPaths) {
+			projectPaths = [];
+		} else {
+			projectPaths = JSON.parse(localStorageProjectPaths);
 		}
 
-		getData();
-	}, []);
+		projectPaths.push(selectedFolder);
+
+		localStorage.setItem("projects", JSON.stringify(projectPaths));
+
+		closeModal()
+		refreshProjectData()
+	}
+
+	async function refreshProjectData() {
+		const localStorageProjectPaths = localStorage.getItem("projects");
+		let projectPaths;
+
+		if (!localStorageProjectPaths) {
+			return;
+		}
+
+		projectPaths = JSON.parse(localStorageProjectPaths);
+
+		const projects: Project[] = [];
+
+		for (const path of projectPaths) {
+			const project: Project = await getProjectDetails(path);
+			projects.push(project);
+		}
+
+		setProjects(projects);
+	}
+
+	useEffect(() => { refreshProjectData() }, []);
 
 	return (
 		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-black">
@@ -118,8 +160,14 @@ export default function Home() {
 											case "localFile": {
 												return (
 													<div className="flex flex-col gap-4">
-														<Button variant="faded" radius="sm" size="md">
-															Select a directory...
+														<Button
+															variant="faded"
+															radius="sm"
+															size="md"
+															className=""
+															onClick={directorySelectOnClick}
+														>
+															{selectedFolder}
 														</Button>
 														<div className="flex flex-col gap-4">
 															<Dropdown>
@@ -144,14 +192,14 @@ export default function Home() {
 																	<DropdownItem key="Visual Studio">
 																		Visual Studio
 																	</DropdownItem>
-																	<DropdownItem key="xCode">xCode</DropdownItem>
+																	<DropdownItem key="Xcode">Xcode</DropdownItem>
 																	<DropdownItem key="RustRover">
 																		RustRover
 																	</DropdownItem>
 																</DropdownMenu>
 															</Dropdown>
 
-															<Button color="primary">Create</Button>
+															<Button color="primary" onClick={() => localDirectoryProjectCreateOnClick(onClose)}>Create</Button>
 														</div>
 													</div>
 												);
@@ -204,7 +252,7 @@ export default function Home() {
 																	<DropdownItem key="Visual Studio">
 																		Visual Studio
 																	</DropdownItem>
-																	<DropdownItem key="xCode">xCode</DropdownItem>
+																	<DropdownItem key="Xcode">Xcode</DropdownItem>
 																	<DropdownItem key="RustRover">
 																		RustRover
 																	</DropdownItem>
