@@ -5,7 +5,12 @@ import {
 	Card,
 	CardBody,
 	CardHeader,
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
 	Progress,
+	Spinner,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -24,6 +29,7 @@ export default function DownloadCard(props: { language: string }) {
 	const [disabled, setDisabled] = useState(true);
 	const [progressValue, setProgressValue] = useState(0);
 	const [showProgress, setShowProgress] = useState(false);
+	const [showManaged, setShowManaged] = useState(false);
 	const [isFinished, setIsFinished] = useState(false);
 
 	useEffect(() => {
@@ -51,8 +57,8 @@ export default function DownloadCard(props: { language: string }) {
 				</CardHeader>
 				<CardBody className="flex flex-col gap-3">
 					{showProgress ? (
-						<Progress value={progressValue} />
-					) : (
+						<Spinner />
+					) : !showManaged ? (
 						<>
 							<Autocomplete
 								onSelectionChange={() => setDisabled(false)}
@@ -67,11 +73,31 @@ export default function DownloadCard(props: { language: string }) {
 								isDisabled={disabled}
 								onPress={() => {
 									setShowProgress(true);
+									setTimeout(() => {
+										setShowProgress(false);
+										setShowManaged(true);
+									}, 2000);
 								}}
 							>
 								Download
 							</Button>
 						</>
+					) : (
+						<Dropdown>
+							<DropdownTrigger>
+								<Button>Manage</Button>
+							</DropdownTrigger>
+							<DropdownMenu>
+								<DropdownItem key="edit">Edit</DropdownItem>
+								<DropdownItem
+									key="delete"
+									className="text-danger"
+									color="danger"
+								>
+									Delete
+								</DropdownItem>
+							</DropdownMenu>
+						</Dropdown>
 					)}
 				</CardBody>
 			</Card>
