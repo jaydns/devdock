@@ -6,7 +6,8 @@ export default function Circle(props: {
 		Python: "bg-[#3572a5]",
 		JavaScript: "bg-[#f1e05a]",
 		TypeScript: "bg-[#3178c6]",
-		Rust: "bg-[#dea584]"
+		Rust: "bg-[#dea584]",
+		Zig: "bg-[#ec915c]"
 	};
 	return (
 		<div
