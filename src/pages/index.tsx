@@ -1,19 +1,202 @@
 import ProjectCard from "@/components/ProjectCard";
-import { Button, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
+import { CogIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+	Button,
+	Input,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader,
+	RadioGroup,
+	Radio,
+	useDisclosure,
+	Autocomplete,
+	AutocompleteItem,
+	Dropdown,
+	DropdownTrigger,
+	DropdownMenu,
+	DropdownItem,
+} from "@nextui-org/react";
+import Image from "next/image";
+import { useState, useMemo, Key } from "react";
+
+const gitRepos = [
+	{ label: "jaydns/solcompute", value: "jaydnsSolcompute" },
+	{ label: "rj17313/discord-tts-bot", value: "discordTtsBot" },
+	{ label: "torvalds/linux", value: "linusLinux" },
+];
 
 export default function Home() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [selected, setSelected] = useState("");
+
+	const [selectedKeys, setSelectedKeys] = useState<
+		"all" | Set<string | number>
+	>(new Set(["Select an IDE"]));
+	const selectedValue = useMemo(
+		() => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+		[selectedKeys],
+	);
+
 	return (
 		<main className="flex h-screen w-screen flex-col justify-between bg-white dark:bg-[rgba(39,39,39,255)]">
 			<div className="m-8 flex flex-wrap">
 				<ProjectCard></ProjectCard>
 			</div>
 			<div className="flex justify-end p-4">
-				<Button radius="full" color="primary">
-					Add Project
+				<Button
+					radius="full"
+					color="primary"
+					isIconOnly
+					className="text-xl"
+					onPress={onOpen}
+				>
+					<PlusIcon className="h-6 w-6" />
 				</Button>
-				<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-					<ModalContent>{(onClose) => <></>}</ModalContent>
+				<Modal
+					isDismissable={false}
+					isOpen={isOpen}
+					onOpenChange={onOpenChange}
+					className=""
+				>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<ModalHeader>Add Project</ModalHeader>
+								<ModalBody>
+									<RadioGroup
+										value={selected}
+										onValueChange={setSelected}
+										label="Choose type of project"
+									>
+										<Radio value="localFile">Local File</Radio>
+										<Radio value="remoteRepository">Remote Repository</Radio>
+									</RadioGroup>
+
+									{(() => {
+										switch (selected) {
+											case "localFile": {
+												return (
+													<div className="flex flex-col gap-4">
+														<Button
+															variant="faded"
+															radius="sm"
+															size="md"
+															className=""
+														>
+															Select a directory...
+														</Button>
+														<div className="flex flex-col gap-4">
+															<Dropdown>
+																<DropdownTrigger>
+																	<Button
+																		variant="bordered"
+																		className="min-w-24"
+																	>
+																		{selectedValue}
+																	</Button>
+																</DropdownTrigger>
+																<DropdownMenu
+																	variant="faded"
+																	disallowEmptySelection
+																	selectionMode="single"
+																	selectedKeys={selectedKeys}
+																	onSelectionChange={setSelectedKeys}
+																>
+																	<DropdownItem key="Visual Studio Code">
+																		Visual Studio Code
+																	</DropdownItem>
+																	<DropdownItem key="Visual Studio">
+																		Visual Studio
+																	</DropdownItem>
+																	<DropdownItem key="xCode">xCode</DropdownItem>
+																	<DropdownItem key="RustRover">
+																		RustRover
+																	</DropdownItem>
+																</DropdownMenu>
+															</Dropdown>
+
+															<Button color="primary">Create</Button>
+														</div>
+													</div>
+												);
+											}
+											case "remoteRepository": {
+												return (
+													<div className="flex flex-col gap-4">
+														<Autocomplete
+															className="h-12"
+															label="Select a Repository"
+														>
+															{gitRepos.map((gitRepo) => (
+																<AutocompleteItem
+																	startContent={
+																		<Image
+																			alt="GitHub logo"
+																			src={"github-mark-white.svg"}
+																			width={20}
+																			height={20}
+																		></Image>
+																	}
+																	key={gitRepo.value}
+																	value={gitRepo.value}
+																>
+																	{gitRepo.label}
+																</AutocompleteItem>
+															))}
+														</Autocomplete>
+
+														<div className="flex flex-col">
+															<Dropdown>
+																<DropdownTrigger>
+																	<Button
+																		variant="bordered"
+																		className="min-w-24"
+																	>
+																		{selectedValue}
+																	</Button>
+																</DropdownTrigger>
+																<DropdownMenu
+																	variant="faded"
+																	disallowEmptySelection
+																	selectionMode="single"
+																	selectedKeys={selectedKeys}
+																	onSelectionChange={setSelectedKeys}
+																>
+																	<DropdownItem key="Visual Studio Code">
+																		Visual Studio Code
+																	</DropdownItem>
+																	<DropdownItem key="Visual Studio">
+																		Visual Studio
+																	</DropdownItem>
+																	<DropdownItem key="xCode">xCode</DropdownItem>
+																	<DropdownItem key="RustRover">
+																		RustRover
+																	</DropdownItem>
+																</DropdownMenu>
+															</Dropdown>
+														</div>
+														<Button color="primary">Create</Button>
+													</div>
+												);
+											}
+											default: {
+												return <></>;
+											}
+										}
+									})()}
+
+									{/* <Input
+										label="Test"
+										labelPlacement="inside"
+										variant="flat"
+										size="sm"
+										className="h-12 p-0"
+									></Input> */}
+								</ModalBody>
+							</>
+						)}
+					</ModalContent>
 				</Modal>
 			</div>
 		</main>
