@@ -6,10 +6,10 @@ async function getProjectDetails(path: string): Promise<Project> {
     // debug
     if (!window.__TAURI_IPC__) {
         return {
-            name: "test",
-            description: "test",
-            path: "test",
-            mainLanguage: "test",
+            name: "jaydns/solcompute",
+            description: "SolCompute - our winning submission to ChargerHacks 2023",
+            path: "/home/test/Projects/solcompute",
+            mainLanguage: "JavaScript",
             id: 1,
         }
     }
