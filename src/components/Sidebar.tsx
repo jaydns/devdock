@@ -1,8 +1,7 @@
 import {
 	Cog6ToothIcon,
 	FolderIcon,
-	SparklesIcon,
-	WrenchIcon,
+	WrenchIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -29,14 +28,14 @@ export default function Sidebar() {
 						Tools
 					</Icon>
 				</Link>
-				<Link href="/generate">
+				{/* <Link href="/generate">
 					<Icon
 						active={router.pathname == "/generate"}
 						icon={<SparklesIcon className="h-5 w-5 stroke-primary" />}
 					>
 						Generate
 					</Icon>
-				</Link>
+				</Link> */}
 			</div>
 			<div className="">
 				<Link href="/settings">
